@@ -3,6 +3,7 @@ import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { AuthProvider } from './features/Auth/AuthProvider'
 import { RequireAuth } from './features/Auth/RequireAuth'
+import { AccountPage } from './pages/AccountPage'
 import { AuthPage } from './pages/AuthPage'
 import { Dashboard } from './pages/Dashboard'
 import { HomePage } from './pages/HomePage'
@@ -11,7 +12,15 @@ export const routes = {
   home: { path: '/', name: 'Главная' },
   registration: { path: '/registration', name: 'Зарегистрироваться' },
   login: { path: '/login', name: 'Войти' },
-  dashboard: { path: '/dashboard', name: 'Админка' },
+}
+
+export const privateRoutes = {
+  dashboard: { path: '/dashboard', name: 'Dashboard', allowedRoles: ['ADMIN'] },
+  account: {
+    path: '/account',
+    name: 'Аккаунт',
+    allowedRoles: ['USER', 'ADMIN'],
+  },
 }
 
 const theme = createTheme({
@@ -40,10 +49,18 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route path={routes.home.path} element={<HomePage />} />
               <Route
-                path={routes.dashboard.path}
+                path={privateRoutes.dashboard.path}
                 element={
                   <RequireAuth>
                     <Dashboard />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path={privateRoutes.account.path}
+                element={
+                  <RequireAuth>
+                    <AccountPage />
                   </RequireAuth>
                 }
               />

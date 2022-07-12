@@ -24,7 +24,7 @@ const createToken = (user) => {
     process.env.JWT_SECRET,
     {
       algorithm: 'HS256',
-      expiresIn: '10s',
+      expiresIn: '1h',
     }
   )
 }

@@ -1,11 +1,12 @@
 import { Avatar, Button, IconButton, Menu, MenuItem } from '@mui/material'
 import { useState } from 'react'
 import { Link as LinkRouter } from 'react-router-dom'
-import { routes } from '../../App'
+import { privateRoutes, routes } from '../../App'
 import { useAuth } from './useAuth.hook'
 
 export const AuthMenu = () => {
-  const { logout, isAuthenticated } = useAuth()
+  const { logout, isAuthenticated, authState } = useAuth()
+  const { role } = authState.userInfo
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const close = () => setAnchorEl(null)
@@ -17,9 +18,17 @@ export const AuthMenu = () => {
             <Avatar />
           </IconButton>
           <Menu open={open} onClose={close} anchorEl={anchorEl}>
-            <MenuItem to={routes.dashboard.path} component={LinkRouter}>
-              {routes.dashboard.name}
-            </MenuItem>
+            {Object.values(privateRoutes)
+              .filter((route) => route.allowedRoles.includes(role))
+              .map((route) => (
+                <MenuItem
+                  key={route.name}
+                  to={route.path}
+                  component={LinkRouter}
+                >
+                  {route.name}
+                </MenuItem>
+              ))}
             <MenuItem onClick={logout}>Выйти</MenuItem>
           </Menu>
         </>

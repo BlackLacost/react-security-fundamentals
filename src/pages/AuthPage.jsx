@@ -7,7 +7,7 @@ import {
   Typography,
 } from '@mui/material'
 import { Navigate, useLocation } from 'react-router-dom'
-import { routes } from '../App'
+import { privateRoutes, routes } from '../App'
 import { useAuth } from '../features/Auth/useAuth.hook'
 import { publicFetch } from '../utils/fetch'
 
@@ -33,7 +33,7 @@ export const AuthPage = () => {
 
   return (
     <>
-      {isAuthenticated() && <Navigate to={routes.dashboard.path} />}
+      {isAuthenticated() && <Navigate to={privateRoutes.dashboard.path} />}
       <Stack
         height="100vh"
         justifyContent="center"

@@ -2,6 +2,7 @@ import { createTheme, CssBaseline, ThemeProvider } from '@mui/material'
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { AuthProvider } from './features/Auth/AuthProvider'
+import { RequireAdmin } from './features/Auth/RequireAdmin'
 import { RequireAuth } from './features/Auth/RequireAuth'
 import { AccountPage } from './pages/AccountPage'
 import { AuthPage } from './pages/AuthPage'
@@ -52,7 +53,9 @@ function App() {
                 path={privateRoutes.dashboard.path}
                 element={
                   <RequireAuth>
-                    <Dashboard />
+                    <RequireAdmin>
+                      <Dashboard />
+                    </RequireAdmin>
                   </RequireAuth>
                 }
               />

@@ -1,12 +1,8 @@
 import { createContext, useState } from 'react'
+import { Navigate } from 'react-router-dom'
+import { routes } from '../../App'
 
 export const AuthContext = createContext()
-
-const initialState = {
-  token: null,
-  expiresAt: null,
-  userInfo: {},
-}
 
 export const AuthProvider = ({ children }) => {
   const token = localStorage.getItem('token')
@@ -26,10 +22,15 @@ export const AuthProvider = ({ children }) => {
   }
 
   const logout = () => {
-    localStorage.setItem('token', '')
-    localStorage.setItem('userInfo', JSON.stringify({}))
-    localStorage.setItem('expiresAt', '')
-    setAuthState(initialState)
+    localStorage.removeItem('token')
+    localStorage.removeItem('userInfo')
+    localStorage.removeItem('expiresAt')
+    setAuthState({
+      token: null,
+      expiresAt: null,
+      userInfo: {},
+    })
+    return <Navigate to={routes.login.path} />
   }
 
   const isAuthenticated = () => {

@@ -41,12 +41,17 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  const isAdmin = () => {
+    return authState.userInfo.role === 'admin'
+  }
+
   return (
     <AuthContext.Provider
       value={{
         authState,
         setAuthState: (authInfo) => setAuthInfo(authInfo),
         isAuthenticated,
+        isAdmin,
         logout,
       }}
     >

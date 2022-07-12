@@ -1,6 +1,7 @@
-import { AppBar, Button, Container, Link, Stack, Toolbar } from '@mui/material'
-import { Link as LinkRouter, Outlet } from 'react-router-dom'
+import { AppBar, Container, Link, Stack, Toolbar } from '@mui/material'
+import { Outlet } from 'react-router-dom'
 import { routes } from '../App'
+import { AuthMenu } from '../features/Auth/AuthMenu'
 
 export const Layout = () => {
   return (
@@ -17,9 +18,7 @@ export const Layout = () => {
               }}
             >
               <Link to={routes.home.path}>{routes.home.name}</Link>
-              <Button to={routes.login.path} component={LinkRouter}>
-                {routes.login.name}
-              </Button>
+              <AuthMenu />
             </Toolbar>
           </Container>
         </AppBar>

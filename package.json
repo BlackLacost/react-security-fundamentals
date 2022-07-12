@@ -25,6 +25,7 @@
   "scripts": {
     "start:client": "BROWSER=none react-scripts start",
     "start:server": "nodemon server/index.mjs",
+    "start:db": "docker-compose up",
     "start": "concurrently npm:start:*",
     "build": "react-scripts build",
     "test": "react-scripts test",

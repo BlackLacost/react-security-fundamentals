@@ -5,7 +5,7 @@ import { routes } from '../App'
 export const Layout = () => {
   return (
     <>
-      <Stack direction="column">
+      <Stack direction="column" minHeight="100vh" bgcolor="lightgray">
         <AppBar color="default" position="sticky">
           <Container>
             <Toolbar

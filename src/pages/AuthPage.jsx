@@ -9,10 +9,12 @@ import {
 import { useState } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { routes } from '../App'
+import { useAuth } from '../features/Auth/useAuth.hook'
 import { publicFetch } from '../utils/fetch'
 
 export const AuthPage = () => {
   const location = useLocation()
+  const authContext = useAuth()
   const [isAuth, setIsAuth] = useState()
 
   const isLoginPage = location.pathname === routes.login.path
@@ -28,7 +30,7 @@ export const AuthPage = () => {
       isLoginPage ? 'login' : 'registration',
       formData
     )
-    console.log(data)
+    authContext.setAuthState(data)
     setIsAuth(true)
   }
 

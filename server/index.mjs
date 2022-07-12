@@ -46,6 +46,7 @@ app.post('/api/login', async (req, res) => {
       const expiresAt = decodedToken.exp
 
       const userInfo = {
+        id: user.id,
         email: user.email,
         role: user.role,
       }

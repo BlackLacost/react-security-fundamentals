@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs'
+import cors from 'cors'
 import express, { json } from 'express'
 import jwt from 'jsonwebtoken'
 import { prisma } from './db.mjs'
@@ -7,6 +8,7 @@ const port = 4000
 const app = express()
 
 app.use(json())
+app.use(cors())
 
 app.get('/', (req, res) => {
   res.json({ message: 'Hello there!' })

@@ -32,11 +32,20 @@ export const AuthProvider = ({ children }) => {
     setAuthState(initialState)
   }
 
+  const isAuthenticated = () => {
+    if (authState.token && authState.expiresAt) {
+      return new Date().getTime() / 1000 < authState.expiresAt
+    } else {
+      return false
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
         authState,
         setAuthState: (authInfo) => setAuthInfo(authInfo),
+        isAuthenticated,
         logout,
       }}
     >

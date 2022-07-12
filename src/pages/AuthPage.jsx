@@ -6,7 +6,6 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { useState } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { routes } from '../App'
 import { useAuth } from '../features/Auth/useAuth.hook'
@@ -14,8 +13,7 @@ import { publicFetch } from '../utils/fetch'
 
 export const AuthPage = () => {
   const location = useLocation()
-  const authContext = useAuth()
-  const [isAuth, setIsAuth] = useState()
+  const { isAuthenticated, setAuthState } = useAuth()
 
   const isLoginPage = location.pathname === routes.login.path
 
@@ -30,13 +28,12 @@ export const AuthPage = () => {
       isLoginPage ? 'login' : 'registration',
       formData
     )
-    authContext.setAuthState(data)
-    setIsAuth(true)
+    setAuthState(data)
   }
 
   return (
     <>
-      {isAuth && <Navigate to={routes.home.path} />}
+      {isAuthenticated() && <Navigate to={routes.dashboard.path} />}
       <Stack
         height="100vh"
         justifyContent="center"

@@ -21,3 +21,12 @@ Content-Type: application/json
 ### Get all users
 GET {{baseUrl}}/users
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjksImVtYWlsIjoiYmxhY2tsYWNvc3RAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNjU3NjkyMTI4LCJleHAiOjE2NTc2OTU3Mjh9.nWQjxcqcmRnvGJVAWNSF6l8FJXIk5IwhruxHKxlpRUU
+
+### Update role
+PATCH {{baseUrl}}/user-role
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjksImVtYWlsIjoiYmxhY2tsYWNvc3RAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNjU3NzAzMzY1LCJleHAiOjE2NTc3MDY5NjV9.wYEduF_g7rWqBFLi5Z3xJzEjiPmctRbA9Z0zPOriziY
+Content-Type: application/json
+
+{
+	"role": "ADMIN"
+}

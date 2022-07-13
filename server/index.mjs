@@ -1,3 +1,4 @@
+import { Role } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 import cors from 'cors'
 import express, { json } from 'express'
@@ -128,7 +129,7 @@ const requireAuth = (req, res, next) => {
 const requireAdmin = (req, res, next) => {
   const user = req.user
 
-  if (user.role !== 'ADMIN') {
+  if (user.role !== Role.ADMIN) {
     return res.status(401).json({ message: 'Insufficent role' })
   }
   next()
@@ -139,6 +140,20 @@ app.get('/api/users', requireAuth, requireAdmin, async (req, res) => {
     select: { id: true, email: true },
   })
   return res.json(users)
+})
+
+app.patch('/api/user-role', requireAuth, async (req, res) => {
+  try {
+    const { role } = req.body
+    const user = req.user
+    await prisma.user.update({ where: { id: user.sub }, data: { role } })
+    res.json({
+      message:
+        'User role updated. You must log in again for the changes to take effect.',
+    })
+  } catch (err) {
+    return res.status(400).json({ error: err })
+  }
 })
 
 app.listen(port, () => {

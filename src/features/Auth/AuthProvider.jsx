@@ -1,36 +1,35 @@
 import { Role } from '@prisma/client'
-import { createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { routes } from '../../App'
+import { publicFetch } from '../../utils/fetch'
 
 export const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
-  const token = localStorage.getItem('token')
-  const userInfo = localStorage.getItem('userInfo')
-  const expiresAt = localStorage.getItem('expiresAt')
   const [authState, setAuthState] = useState({
-    token,
-    userInfo: userInfo ? JSON.parse(userInfo) : {},
-    expiresAt,
+    token: null,
+    userInfo: {},
+    expiresAt: null,
   })
 
-  const setAuthInfo = ({ token, userInfo, expiresAt }) => {
-    localStorage.setItem('token', token)
-    localStorage.setItem('userInfo', JSON.stringify(userInfo))
-    localStorage.setItem('expiresAt', expiresAt)
-    setAuthState({ token, userInfo, expiresAt })
-  }
+  useEffect(() => {
+    const me = async () => {
+      const res = await publicFetch.get('me')
+      const { token, userInfo, expiresAt } = res.data
+      setAuthState({ token, userInfo, expiresAt })
+    }
+    me()
+  }, [])
 
-  const logout = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('userInfo')
-    localStorage.removeItem('expiresAt')
-    setAuthState({
-      token: null,
-      expiresAt: null,
-      userInfo: {},
-    })
+  const logout = async () => {
+    const res = await publicFetch.get('logout')
+    console.log(res)
+    // setAuthState({
+    //   token: null,
+    //   expiresAt: null,
+    //   userInfo: {},
+    // })
     return <Navigate to={routes.login.path} />
   }
 
@@ -50,7 +49,7 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         authState,
-        setAuthState: (authInfo) => setAuthInfo(authInfo),
+        setAuthState,
         isAuthenticated,
         isAdmin,
         logout,

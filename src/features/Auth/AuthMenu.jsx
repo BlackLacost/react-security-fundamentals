@@ -30,7 +30,7 @@ export const AuthMenu = () => {
                   {route.name}
                 </MenuItem>
               ))}
-            <MenuItem onClick={logout}>Выйти</MenuItem>
+            <MenuItem onClick={async () => await logout()}>Выйти</MenuItem>
           </Menu>
         </>
       ) : (

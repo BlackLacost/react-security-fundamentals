@@ -26,7 +26,10 @@ export const AuthPage = () => {
     }
     const { data } = await publicFetch.post(
       isLoginPage ? 'login' : 'registration',
-      formData
+      formData,
+      {
+        withCredentials: true,
+      }
     )
     setAuthState(data)
   }

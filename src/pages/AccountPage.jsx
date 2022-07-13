@@ -10,14 +10,15 @@ import {
   Typography,
 } from '@mui/material'
 import { Role } from '@prisma/client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AuthDebugger } from '../components/AuthDebugger'
 import { useAuth } from '../features/Auth/useAuth.hook'
 import { useAuthAxios } from '../features/Auth/useAuthAxios.hook'
+import { publicFetch } from '../utils/fetch'
 
 export const AccountPage = () => {
   const [message, setMessage] = useState(null)
-  const { authState } = useAuth()
+  const { authState, setAuthState } = useAuth()
   const { authAxios } = useAuthAxios()
   const [role, setRole] = useState(authState.userInfo.role)
 
@@ -27,10 +28,14 @@ export const AccountPage = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault()
-    console.log(role)
-    const res = await authAxios.patch('user-role', { role })
+    let res = await authAxios.patch('user-role', { role })
     setMessage(res.data.message)
+    res = await publicFetch.get('me')
+    const { token, userInfo, expiresAt } = res.data
+    setAuthState({ token, userInfo, expiresAt })
   }
+
+  useEffect(() => {}, [setAuthState])
 
   return (
     <Stack mt={2} spacing={2}>

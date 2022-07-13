@@ -1,5 +1,6 @@
 import { Role } from '@prisma/client'
 import bcrypt from 'bcryptjs'
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express, { json } from 'express'
 import jwt from 'jsonwebtoken'
@@ -9,7 +10,8 @@ const port = 4000
 const app = express()
 
 app.use(json())
-app.use(cors())
+app.use(cookieParser())
+app.use(cors({ origin: ['http://localhost:3000'], credentials: true }))
 
 app.get('/', (req, res) => {
   res.json({ message: 'Hello there!' })
@@ -51,6 +53,10 @@ app.post('/api/login', async (req, res) => {
         email: user.email,
         role: user.role,
       }
+
+      res.cookie('token', token, {
+        httpOnly: true,
+      })
 
       return res.json({
         message: 'Authentication successful!',
@@ -95,6 +101,10 @@ app.post('/api/registration', async (req, res) => {
         role: savedUser.role,
       }
 
+      res.cookie('token', token, {
+        httpOnly: true,
+      })
+
       return res.json({ message: 'User created!', token, userInfo, expiresAt })
     } else {
       return res
@@ -110,7 +120,7 @@ app.post('/api/registration', async (req, res) => {
 })
 
 const requireAuth = (req, res, next) => {
-  const token = req.headers.authorization?.replace('Bearer ', '')
+  const token = req.cookies.token
   if (!token) {
     return res.status(401).json({ message: 'No authorization token was found' })
   }
@@ -156,6 +166,30 @@ app.patch('/api/user-role', requireAuth, async (req, res) => {
   }
 })
 
-app.listen(port, () => {
+app.get('/api/me', requireAuth, async (req, res) => {
+  const { sub } = req.user
+  const user = await prisma.user.findUnique({ where: { id: sub } })
+  const token = createToken(user)
+  const decodedToken = jwt.decode(token)
+  const expiresAt = decodedToken.exp
+
+  const userInfo = {
+    email: user.email,
+    role: user.role,
+  }
+
+  res.cookie('token', token, {
+    httpOnly: true,
+  })
+
+  return res.json({ message: 'You', token, userInfo, expiresAt })
+})
+
+app.get('/api/logout', requireAuth, (req, res) => {
+  res.clearCookie('token')
+  return res.json({ message: 'logout' })
+})
+
+app.listen(port, '0.0.0.0', () => {
   console.log(`Server on http://localhost:${port}`)
 })

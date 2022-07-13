@@ -125,8 +125,16 @@ const requireAuth = (req, res, next) => {
   }
 }
 
-app.get('/api/users', requireAuth, async (req, res) => {
-  console.log(req.user)
+const requireAdmin = (req, res, next) => {
+  const user = req.user
+
+  if (user.role !== 'ADMIN') {
+    return res.status(401).json({ message: 'Insufficent role' })
+  }
+  next()
+}
+
+app.get('/api/users', requireAuth, requireAdmin, async (req, res) => {
   const users = await prisma.user.findMany({
     select: { id: true, email: true },
   })

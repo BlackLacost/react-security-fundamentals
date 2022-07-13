@@ -1,3 +1,4 @@
+import { Role } from '@prisma/client'
 import { createContext, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { routes } from '../../App'
@@ -42,7 +43,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   const isAdmin = () => {
-    return authState.userInfo.role === 'ADMIN'
+    return authState.userInfo.role === Role.ADMIN
   }
 
   return (

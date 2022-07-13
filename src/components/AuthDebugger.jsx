@@ -11,7 +11,7 @@ export const AuthDebugger = () => {
         Auth Debugger
       </Button>
       {showDebugger && (
-        <Paper>
+        <Paper sx={{ width: 600 }}>
           <Stack p={3} spacing={2}>
             <Typography variant="h5">Token</Typography>
             <Typography

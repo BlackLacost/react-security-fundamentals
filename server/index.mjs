@@ -108,6 +108,31 @@ app.post('/api/registration', async (req, res) => {
   }
 })
 
+const requireAuth = (req, res, next) => {
+  const token = req.headers.authorization?.replace('Bearer ', '')
+  if (!token) {
+    return res.status(401).json({ message: 'No authorization token was found' })
+  }
+  const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
+
+  if (!decodedToken) {
+    return res
+      .status(401)
+      .json({ message: 'There was a problem authorizing the request' })
+  } else {
+    req.user = decodedToken
+    next()
+  }
+}
+
+app.get('/api/users', requireAuth, async (req, res) => {
+  console.log(req.user)
+  const users = await prisma.user.findMany({
+    select: { id: true, email: true },
+  })
+  return res.json(users)
+})
+
 app.listen(port, () => {
   console.log(`Server on http://localhost:${port}`)
 })

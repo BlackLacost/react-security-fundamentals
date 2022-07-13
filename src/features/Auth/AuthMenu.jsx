@@ -25,6 +25,7 @@ export const AuthMenu = () => {
                   key={route.name}
                   to={route.path}
                   component={LinkRouter}
+                  onClick={close}
                 >
                   {route.name}
                 </MenuItem>

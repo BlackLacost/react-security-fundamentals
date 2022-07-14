@@ -1,5 +1,5 @@
 {
-  "name": "auth-react-jwt-access-cookie",
+  "name": "react-security-fundamentals",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
